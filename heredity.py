@@ -2,6 +2,7 @@ import csv
 import itertools
 import sys
 
+# Pre-Written
 PROBS = {
     # Unconditional probabilities for having gene
     "gene": {2: 0.01, 1: 0.03, 0: 0.96},
@@ -18,6 +19,7 @@ PROBS = {
 }
 
 
+# Pre-Written
 def main():
     # Check for proper usage
     if len(sys.argv) != 2:
@@ -65,6 +67,7 @@ def main():
                 print(f"    {value}: {p:.4f}")
 
 
+# Pre-Written
 def load_data(filename):
     """
     Load gene and trait data from a file into a dictionary.
@@ -92,6 +95,7 @@ def load_data(filename):
     return data
 
 
+# Pre-Written
 def powerset(s):
     """
     Return a list of all possible subsets of set s.
@@ -132,9 +136,9 @@ def joint_probability(people, one_gene, two_genes, have_trait):
 
     # P(a | b) = P(a,b)/P(b)
     # P(a,b) = P(a) * P(b)
-    
+
     joint_prob = 1
-    
+
     for person in people:
         prob = 1
         genes = 2 if person in two_genes else 1 if person in one_gene else 0
@@ -143,7 +147,7 @@ def joint_probability(people, one_gene, two_genes, have_trait):
         if not people[person]["mother"] or not people[person]["father"]:
             # Unconditional
             prob *= PROBS["gene"][genes]
-        
+
         else:
             m_prob = parent_prob(people[person]["mother"], one_gene, two_genes)
             f_prob = parent_prob(people[person]["father"], one_gene, two_genes)
@@ -157,7 +161,7 @@ def joint_probability(people, one_gene, two_genes, have_trait):
                 prob *= (1 - m_prob) * f_prob + (1 - f_prob) * m_prob
             else:
                 prob *= (1 - m_prob) * (1 - f_prob)
-        
+
         # Also, always there's a chance that you have the genes and not the trait
         prob *= PROBS["trait"][genes][trait]
         joint_prob *= prob
@@ -195,13 +199,13 @@ def normalize(probabilities):
     for person in probabilities:
         k = 1 / sum(probabilities[person]["gene"].values())
         probabilities[person]["gene"] = {
-            genes: k*p for genes, p in probabilities[person]["gene"].items()
+            genes: k * p for genes, p in probabilities[person]["gene"].items()
         }
         probabilities[person]["trait"] = {
-            genes: k*p for genes, p in probabilities[person]["trait"].items()
+            genes: k * p for genes, p in probabilities[person]["trait"].items()
         }
 
 
-
+# Pre-Written
 if __name__ == "__main__":
     main()
